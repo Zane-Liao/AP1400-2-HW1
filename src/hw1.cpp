@@ -51,27 +51,77 @@ void show(const Matrix<T>& matrix) {
 
 template <typename T>
 Matrix<T> multiply(const Matrix<T>& matrix, T c) {
-    return Matrix<T>__;
+    // copy with matrix -> result
+    auto result = matrix;
+
+    for (auto& row : matrix) {
+        std::transform(row.begin(), row.end(), row.begin(),
+            [c](T value){ // value with in row[element...];
+                c * value;
+        });
+    }
+    return result;
 }
 
+// matrix1 -> row, matrix2 -> col euqals mul_matrix(row, col)
 template <typename T>
 Matrix<T> multiply(const Matrix<T>& matrix1, const Matrix<T>& matrix2) {
-    return Matrix<T>__;
+    // O^3
+    size_t m = matrix1.size(); // row
+    size_t n = matrix1[0].size(); // row
+    size_t p = matrix2[0].size(); // row
+    Matrix<T> result(m, (std::vector<T>(p, 0)));
+
+    for (size_t i = 0; i < m; i += 1) {
+        for (size_t k = 0; k < n; k += 1) {
+            for (size_t j = 0; j < p; j += 1) {
+                result[i][j] += matrix1[i][k] * matrix2[k][j];
+            }
+        }
+    }
+
+    return result;
 }
 
 template <typename T>
 Matrix<T> sum(const Matrix<T>& matrix, T c) {
-    return Matrix<T>__;
+    // Simple to multipy(const Matrix<T>& matrix, T c)
+    auto result = matrix;
+
+    for (auto& row : matrix) {
+        std::transform(row.begin(), row.end(), row.begin(),
+            [c](T value){
+                c + value;
+        });
+    }
+    return result;
 }
 
 template <typename T>
 Matrix<T> sum(const Matrix<T>& matrix1, const Matrix<T>& matrix2) {
-    return Matrix<T>__;
+    size_t m = matrix1.size();
+    size_t p = matrix2[0].size();
+    Matrix<T> result(m, (std::vector<T>(p, 0)));
+
+    for (size_t i = 0; i < m; i += 1) {
+        for (size_t j = 0; j < p; j += 1) {
+            result[i][j] = matrix1[i][j] + matrix2[i][j];
+        }
+    }
+    return result;
 }
 
 template <typename T>
 Matrix<T> transpose(const Matrix<T>& matrix) {
-    return Matrix<T>__;
+    auto result = matrix;
+
+    for (size_t i = 0; i < matrix.size(); i += 1) {
+        for (size_t j = 0; j < matrix[0].size(); j += 1) {
+            result[i][j] = matrix[j][i];
+        }
+    }
+
+    return result;
 }
 
 template <typename T>
